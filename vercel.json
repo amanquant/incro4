@@ -6,13 +6,12 @@
     "SUPABASE_SERVICE_KEY": "",
     "VERCEL_ENV": ""
   },
-  "buildCommand": "pip install -r requirements.txt",
-  "outputDirectory": ".",
-  "functions": {
-    "api/app.py": {
-      "runtime": "vercel/python3.11"
+  "builds": [
+    {
+      "src": "api/app.py",
+      "use": "@vercel/python"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/(.*)",
