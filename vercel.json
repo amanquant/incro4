@@ -5,7 +5,6 @@
     "SUPABASE_API_KEY": "",
     "SUPABASE_SERVICE_KEY": "",
     "VERCEL_ENV": ""
-  }
   },
   "buildCommand": "pip install -r requirements.txt",
   "outputDirectory": ".",
