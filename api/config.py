@@ -14,6 +14,9 @@ load_dotenv()
 # SUPABASE CONFIGURATION (replaces DROPBOX config)
 # ============================================================================
 
+print("SUPABASE_URL:",os.getenv("SUPABASE_URL"))
+print("SUPABASE_API_KEY:",os.getenv("SUPABASE_API_KEY"))
+print("SUPABASE_SERVICE_KEY:",os.getenv("SUPABASE_SERVICE_KEY"))
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_API_KEY = os.getenv("SUPABASE_API_KEY")  # anon key
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY")  # service role (for admin ops)
