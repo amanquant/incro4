@@ -1,7 +1,4 @@
-# vercel.json
-"""
-Vercel deployment configuration
-"""
+# vercel.json (CORRECTED)
 {
   "version": 2,
   "env": {
@@ -18,27 +15,19 @@ Vercel deployment configuration
       "description": "Environment: development, preview, or production"
     }
   },
-  "functions": {
-    "api/**/*.py": {
-      "runtime": "python@3.11",
-      "memory": 1024,
-      "maxDuration": 26,
-      "includeFiles": "lib/**",
-      "excludeFiles": "tests/**"
-    }
-  },
   "buildCommand": "pip install -r requirements.txt",
   "outputDirectory": ".",
+  "functions": {
+    "api/app.py": {
+      "runtime": "python@3.11",
+      "memory": 1024,
+      "maxDuration": 26
+    }
+  },
   "routes": [
     {
-      "src": "/api/v1/(.*)",
-      "dest": "api/v1/routes.py",
-      "methods": ["GET", "POST", "OPTIONS"]
-    },
-    {
-      "src": "/health",
-      "dest": "api/v1/routes.py",
-      "methods": ["GET"]
+      "src": "/(.*)",
+      "dest": "api/app.py"
     }
   ]
 }
