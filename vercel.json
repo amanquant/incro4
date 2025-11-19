@@ -10,7 +10,7 @@
   "outputDirectory": ".",
   "functions": {
     "api/app.py": {
-      "runtime": "python@3.11",
+      "runtime": "python3.11",
       "memory": 1024,
       "maxDuration": 26
     }
