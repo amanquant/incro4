@@ -1,18 +1,11 @@
 {
   "version": 2,
   "env": {
-    "SUPABASE_URL": {
-      "description": "Supabase project URL"
-    },
-    "SUPABASE_API_KEY": {
-      "description": "Supabase anon API key"
-    },
-    "SUPABASE_SERVICE_KEY": {
-      "description": "Supabase service role key (optional)"
-    },
-    "VERCEL_ENV": {
-      "description": "Environment: development, preview, or production"
-    }
+    "SUPABASE_URL": "",
+    "SUPABASE_API_KEY": "",
+    "SUPABASE_SERVICE_KEY": "",
+    "VERCEL_ENV": ""
+  }
   },
   "buildCommand": "pip install -r requirements.txt",
   "outputDirectory": ".",
