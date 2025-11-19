@@ -94,8 +94,8 @@ async def health():
 # ============================================================================
 
 # Routes will be included here
-# from .v1 import routes
-# app.include_router(routes.router, prefix="/api/v1")
+from .v1 import routes
+app.include_router(routes.router, prefix="/api/v1")
 
 
 # ============================================================================
