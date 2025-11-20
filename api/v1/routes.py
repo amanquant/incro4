@@ -27,7 +27,7 @@ from api.database import (
 )
 
 # Corrected lines: lib.valuation (not lib/valuation)
-from lib.valuation import DCF_automated, classify_by_growth
+from app.lib.valuation import DCF_automated, classify_by_growth
 from lib.metrics import calculate_metrics_from_dataset, get_sector_percentiles, get_percentile_position
 from lib.predictability import predictability_decision_tree
 
