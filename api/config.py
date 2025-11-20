@@ -69,7 +69,7 @@ TABLES = {
 # VERCEL DEPLOYMENT CONFIG
 # ============================================================================
 
-VERCEL_ENV = os.getenv("VERCEL_ENV", "development")  # development, preview, production
+VERCEL_ENV = os.getenv("VERCEL_ENV", "production")  # development, preview, production
 MAX_REQUEST_DURATION = 25  # Vercel free tier max: 26 seconds
 
 # ============================================================================
