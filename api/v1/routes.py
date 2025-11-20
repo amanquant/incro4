@@ -6,6 +6,7 @@ All endpoints preserve the original logic via lib/ modules
 
 import sys
 import os
+import lib
 
 # --- FIX START: Add Project Root to Path ---
 # This allows us to import 'lib' even if Vercel thinks 'api' is the root.
