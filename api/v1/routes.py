@@ -4,23 +4,38 @@ FastAPI routes for Vercel deployment
 All endpoints preserve the original logic via lib/ modules
 """
 
+import sys
+import os
+
+# --- FIX START: Add Project Root to Path ---
+# This allows us to import 'lib' even if Vercel thinks 'api' is the root.
+# We go up 3 levels: routes.py -> v1 -> api -> PROJECT_ROOT
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(os.path.dirname(current_dir))
+if project_root not in sys.path:
+    sys.path.append(project_root)
+# --- FIX END ---
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import JSONResponse
 from typing import Optional, Dict, List
 import pandas as pd
 import logging
 
-from ..config import config, TABLES
-from ..database import (
+# --- UPDATED IMPORTS: Changed from Relative (..) to Absolute ---
+from api.config import config, TABLES
+from api.database import (
     load_dataset, load_wacc_map, load_portfolio, load_contacts,
     search_companies, get_company_by_id, get_sector_data, load_all_data
 )
-from ...lib.valuation import DCF_automated, classify_by_growth
-from ...lib.metrics import calculate_metrics_from_dataset, get_sector_percentiles, get_percentile_position
-from ...lib.predictability import predictability_decision_tree
+from lib.valuation import DCF_automated, classify_by_growth
+from lib.metrics import calculate_metrics_from_dataset, get_sector_percentiles, get_percentile_position
+from lib.predictability import predictability_decision_tree
 
 logger = logging.getLogger(__name__)
 app = FastAPI(title="Incrolink API", version="2.0.0")
+
+# ... (The rest of your code remains exactly the same from here down)
 
 # ============================================================================
 # HEALTH CHECK ENDPOINT
