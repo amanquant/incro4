@@ -34,7 +34,7 @@ from lib.predictability import predictability_decision_tree
 logger = logging.getLogger(__name__)
 app = FastAPI(title="Incrolink API", version="2.0.0")
 
-@@app.get("/health")
+@app.get("/health")
 async def health_check():
     """Health check endpoint for Vercel"""
     return {
