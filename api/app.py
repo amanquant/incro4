@@ -150,6 +150,26 @@ async def general_exception_handler(request, exc):
 
 handler = app  # Vercel serverless functions expect 'handler'
 
+@app.get("/debug/env")
+async def debug_env():
+    import os
+    return {
+        "database_url": "***" if os.getenv("DATABASE_URL") else "NOT SET",
+        "supabase_url": "***" if os.getenv("SUPABASE_URL") else "NOT SET",
+        "supabase_key": "***" if os.getenv("SUPABASE_KEY") else "NOT SET"
+    }
+
+@app.get("/debug/db")
+async def test_db():
+    try:
+        engine = create_async_engine(os.getenv("DATABASE_URL"))
+        async with engine.connect() as conn:
+            await conn.execute("SELECT 1")
+            return {"status": "connected"}
+    except Exception as e:
+        return {"status": "failed", "error": str(e)}
+
+
 
 if __name__ == "__main__":
     import uvicorn
