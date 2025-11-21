@@ -1,7 +1,7 @@
 {
   "version": 2,
   "env": {
-    "PYTHONPATH": "./"
+    "PYTHONPATH": "./",
     "SUPABASE_URL": "",
     "SUPABASE_API_KEY": "",
     "SUPABASE_SERVICE_KEY": "",
