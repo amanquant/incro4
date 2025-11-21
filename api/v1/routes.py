@@ -1,35 +1,42 @@
-import sys
-from pathlib import Path
+# api/v1/routes.py
 
+import sys
+import os
+from pathlib import Path
+from typing import Optional, Dict, List
+import logging
+import pandas as pd
+
+from fastapi import APIRouter, HTTPException, Query
+
+# --- PATH SETUP ---
+# Ensure project root is in sys.path to allow imports from 'lib'
 current_file = Path(__file__).resolve()
+# Go up 3 levels: v1 -> api -> project_root
 project_root = current_file.parent.parent.parent
 
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-from fastapi import FastAPI, HTTPException, Query
-from typing import Optional, Dict, List
-import pandas as pd
-import logging
-
-# Now imports will work correctly
-from lib.valuation import DCF_automated, classify_by_growth
-from lib.metrics import calculate_metrics_from_dataset, get_sector_percentiles, get_percentile_position
-from lib.predictability import predictability_decision_tree
-from api.config import config, TABLES
+# --- IMPORTS ---
+from api.config import config
 from api.database import (
     load_dataset, load_wacc_map, load_portfolio, load_contacts,
     search_companies, get_company_by_id, get_sector_data, load_all_data
 )
 
+from lib.valuation import DCF_automated, classify_by_growth
+from lib.metrics import calculate_metrics_from_dataset, get_sector_percentiles, get_percentile_position
+from lib.predictability import predictability_decision_tree
+
 logger = logging.getLogger(__name__)
-app = FastAPI(title="Incrolink API", version="2.0.0")
 
-# ... rest of your code ...
+# Initialize Router (Not FastAPI app)
+router = APIRouter()
 
-@app.get("/health")
+@router.get("/health")
 async def health_check():
-    """Health check endpoint for Vercel"""
+    """Health check endpoint"""
     return {
         "status": "healthy",
         "environment": getattr(config, 'vercel_env', 'production'),
@@ -38,9 +45,10 @@ async def health_check():
 
 # ============================================================================
 # DATA LOADING ENDPOINTS
+# prefixes are handled by api/app.py, so we use relative paths here
 # ============================================================================
 
-@app.get(f"{config.api_prefix}/data/all")
+@router.get("/data/all")
 async def get_all_data():
     """Load all data (dataset, wacc, portfolio, contacts)"""
     try:
@@ -61,7 +69,7 @@ async def get_all_data():
         raise HTTPException(status_code=500, detail=f"Failed to load data: {str(e)}")
 
 
-@app.get(f"{config.api_prefix}/data/dataset")
+@router.get("/data/dataset")
 async def get_dataset():
     """Load companies dataset"""
     try:
@@ -73,7 +81,7 @@ async def get_dataset():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get(f"{config.api_prefix}/data/wacc")
+@router.get("/data/wacc")
 async def get_wacc():
     """Load WACC map"""
     try:
@@ -89,7 +97,7 @@ async def get_wacc():
 # SEARCH ENDPOINTS
 # ============================================================================
 
-@app.get(f"{config.api_prefix}/search/companies")
+@router.get("/search/companies")
 async def search_companies_endpoint(
     query: str = Query(..., min_length=2),
     limit: int = Query(10, ge=1, le=100)
@@ -104,7 +112,7 @@ async def search_companies_endpoint(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get(f"{config.api_prefix}/company/{{company_id}}")
+@router.get("/company/{company_id}")
 async def get_company_endpoint(company_id: str):
     """Get specific company by ID"""
     try:
@@ -122,7 +130,7 @@ async def get_company_endpoint(company_id: str):
 # ANALYTICS ENDPOINTS - Frame 1-4 Logic
 # ============================================================================
 
-@app.post(f"{config.api_prefix}/analysis/frame1")
+@router.post("/analysis/frame1")
 async def frame1_analysis_endpoint(company_data: Dict):
     """
     Frame 1: Financial Metrics Analysis
@@ -175,7 +183,7 @@ async def frame1_analysis_endpoint(company_data: Dict):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post(f"{config.api_prefix}/analysis/frame2")
+@router.post("/analysis/frame2")
 async def frame2_valuation_endpoint(company_data: Dict):
     """
     Frame 2: DCF Valuation Analysis
@@ -219,7 +227,7 @@ async def frame2_valuation_endpoint(company_data: Dict):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post(f"{config.api_prefix}/analysis/frame3")
+@router.post("/analysis/frame3")
 async def frame3_predictability_endpoint(analysis_data: Dict):
     """
     Frame 3: Predictability Classification
@@ -259,7 +267,7 @@ async def frame3_predictability_endpoint(analysis_data: Dict):
 # BATCH ANALYSIS ENDPOINT
 # ============================================================================
 
-@app.post(f"{config.api_prefix}/analysis/batch")
+@router.post("/analysis/batch")
 async def batch_analysis(companies_data: List[Dict]):
     """
     Run Frame 1-3 analysis on multiple companies
@@ -295,8 +303,3 @@ async def batch_analysis(companies_data: List[Dict]):
     except Exception as e:
         logger.error(f"Batch analysis error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
