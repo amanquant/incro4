@@ -11,6 +11,8 @@
     {
       "src": "api/app.py",
       "use": "@vercel/python"
+      "config": {
+        "includeFiles": ["lib/**", "data/**", "sql/**"]
     }
   ],
   "routes": [
