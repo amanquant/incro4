@@ -94,7 +94,10 @@ async def health():
 # ============================================================================
 
 # Routes will be included here
+from fastapi import FastAPI
 from .v1 import routes
+
+app = FastAPI()
 app.include_router(routes.router, prefix="/api/v1")
 
 
