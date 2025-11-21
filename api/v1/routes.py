@@ -27,12 +27,9 @@ from api.database import (
 )
 
 # Corrected lines: lib.valuation (not lib/valuation)
-valuation_file= "https://github.com/amanquant/incro4/blob/main/lib/valuation.py"
-metrics_file= "https://github.com/amanquant/incro4/blob/main/lib/metrics.py"
-predictability_file=  "https://github.com/amanquant/incro4/blob/main/lib/predictability.py"
-from valuation_file import DCF_automated, classify_by_growth
-from metrics_file import calculate_metrics_from_dataset, get_sector_percentiles, get_percentile_position
-from predictability_file import predictability_decision_tree
+from lib.valuation import DCF_automated, classify_by_growth
+from lib.metrics import calculate_metrics_from_dataset, get_sector_percentiles, get_percentile_position
+from lib.predictability import predictability_decision_tree
 
 logger = logging.getLogger(__name__)
 app = FastAPI(title="Incrolink API", version="2.0.0")
