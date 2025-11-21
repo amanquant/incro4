@@ -1,20 +1,11 @@
 import sys
 from pathlib import Path
 
-# --- FIX START: Path Configuration ---
-# Calculate the project root dynamically
-# Current file: /var/task/api/v1/routes.py
 current_file = Path(__file__).resolve()
-
-# Go up 3 levels: v1 -> api -> root
 project_root = current_file.parent.parent.parent
 
-# Add root to sys.path so we can do:
-# 'from lib...' (because lib is in root)
-# 'from api...' (because api is in root)
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
-# --- FIX END ---
 
 from fastapi import FastAPI, HTTPException, Query
 from typing import Optional, Dict, List
@@ -113,7 +104,7 @@ async def search_companies_endpoint(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get(f"{config.api_prefix}/company/{company_id}")
+@app.get(f"{config.api_prefix}/company/{{company_id}}")
 async def get_company_endpoint(company_id: str):
     """Get specific company by ID"""
     try:
