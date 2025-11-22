@@ -1,0 +1,7 @@
+:root {
+  /* Update these colors to your brand */
+  --color-primary: #2180A1;        /* Teal - Main color */
+  --color-primary-hover: #1d7489;  /* Hover state */
+  --color-secondary: #F5F5F5;      /* Light background */
+  --color-text: #1F2121;           /* Dark text */
+}
